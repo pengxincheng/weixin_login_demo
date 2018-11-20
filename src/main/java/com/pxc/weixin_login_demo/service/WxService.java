@@ -15,4 +15,9 @@ public interface WxService {
      * @return
      */
     boolean validate(WxReq wxReq);
+
+    /**
+     * 获取微信accessToken
+     */
+    String getWxAccessToken(String appId,String secret);
 }

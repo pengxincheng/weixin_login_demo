@@ -5,6 +5,7 @@ import com.pxc.weixin_login_demo.dto.req.WxReq;
 import com.pxc.weixin_login_demo.service.WxService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,5 +39,12 @@ public class WxServiceImpl implements WxService {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public String getWxAccessToken(String appId, String secret) {
+        RestTemplate restTemplate = new RestTemplate();
+        //restTemplate.getForObject()
+        return null;
     }
 }

@@ -6,10 +6,6 @@
     <groupId>com.pxc</groupId>
     <artifactId>weixin_login_demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <modules>
-       <!-- <module>mybatis_generator</module>-->
-    </modules>
-    <packaging>pom</packaging>
 
     <name>weixin_login_demo</name>
     <description>Demo project for Spring Boot</description>
