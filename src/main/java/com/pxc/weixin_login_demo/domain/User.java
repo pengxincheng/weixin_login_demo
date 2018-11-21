@@ -1,21 +1,11 @@
 package com.pxc.weixin_login_demo.domain;
 
 public class User {
-    private Integer userId;
-
     private String userName;
 
     private String password;
 
     private String openId;
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public String getUserName() {
         return userName;
