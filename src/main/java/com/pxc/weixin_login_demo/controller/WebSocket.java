@@ -2,7 +2,7 @@ package com.pxc.weixin_login_demo.controller;
 
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.server.standard.SpringConfigurator;
+
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
