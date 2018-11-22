@@ -12,7 +12,7 @@ $("#login-button").click(function () {
         console.log(data);
         if("SUCCESS" === data.code){
             QrcodeLogin();
-            webSocketConnect(data.data);
+            webSocketConnect(data.data.sceneId);
         }
     })
 })
