@@ -1,5 +1,6 @@
 package com.pxc.weixin_login_demo.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pxc.weixin_login_demo.dto.req.WxReq;
 
 /**
@@ -20,4 +21,11 @@ public interface WxService {
      * 获取微信accessToken
      */
     String getWxAccessToken(String appId,String secret);
+
+    /**
+     * 获取二维码ticket
+     * @param accessToken
+     * @return
+     */
+    JSONObject getQrCode(String accessToken);
 }

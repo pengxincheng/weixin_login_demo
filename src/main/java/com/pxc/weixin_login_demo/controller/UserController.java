@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * @author pengxincheng@ipaynow.cn
@@ -32,8 +35,11 @@ public class UserController {
 
         User user = userMapper.selectByPrimaryKey(loginReq.getUserName());
         if(null != user){
+            Random random = new Random();
+            int sceneId = random.nextInt(10000);
             request.getSession().setAttribute("user",user);
-            return WeCashierRespFactory.builderSuccess();
+            request.getSession().setAttribute("sceneId",sceneId);
+            return WeCashierRespFactory.builderSuccess(sceneId);
         }else{
             return WeCashierRespFactory.builderFail("用户名或密码错误！");
         }

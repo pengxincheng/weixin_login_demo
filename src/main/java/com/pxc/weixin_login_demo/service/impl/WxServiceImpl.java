@@ -1,16 +1,17 @@
 package com.pxc.weixin_login_demo.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.pxc.weixin_login_demo.config.WxConfig;
 import com.pxc.weixin_login_demo.dto.req.WxReq;
 import com.pxc.weixin_login_demo.service.WxService;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 //import org.apache.commons.codec.digest.DigestUtils;
 
@@ -21,6 +22,8 @@ import java.util.List;
  */
 @Service
 public class WxServiceImpl implements WxService {
+
+    private static final Logger logger = LoggerFactory.getLogger(WxServiceImpl.class);
 
     @Override
     public boolean validate(WxReq wxReq) {
@@ -43,8 +46,44 @@ public class WxServiceImpl implements WxService {
 
     @Override
     public String getWxAccessToken(String appId, String secret) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            Map<String,String> param = new HashMap<>();
+            param.put("grant_type","client_credential");
+            param.put("appid",appId);
+            param.put("secret",secret);
+
+            String resp = restTemplate.getForObject(WxConfig.ACCESS_TOKEN_URL,String.class,param);
+            logger.info("获取token接口，微信返回：{}",resp);
+            JSONObject jsonObject = JSONObject.parseObject(resp);
+             if (jsonObject.containsKey("access_token")){
+                 return jsonObject.getString("access_token");
+             }
+             return null;
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            return null;
+        }
+    }
+
+    @Override
+    public JSONObject getQrCode(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
-        //restTemplate.getForObject()
+        Map<String,Object> param = new HashMap<>();
+        //{"expire_seconds": 604800, "action_name": "QR_SCENE", "action_info": {"scene": {"scene_id": 123}}}
+        param.put("expire_seconds",604800);
+        param.put("action_name","QR_SCENE");
+        param.put("action_info","");
+
+        Map<String,Object> scene = new HashMap<>();
+        scene.put("scene_id","");
+
+        String resp = restTemplate.postForObject(WxConfig.QR_CODE_URL,null,String.class,param);
+        logger.info("调用获取二维码接口返回：{}",resp);
+        JSONObject result = JSONObject.parseObject(resp);
+        if(result.containsKey("ticket")){
+            return result;
+        }
         return null;
     }
 }

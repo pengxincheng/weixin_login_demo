@@ -24,10 +24,12 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -70,6 +72,7 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.46</version>
         </dependency>
+
 
     </dependencies>
 

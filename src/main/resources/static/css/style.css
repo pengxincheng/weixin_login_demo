@@ -213,7 +213,7 @@ nav>.nav_link>ul>li:last-child{
 
 }
 
-.container>.login_body>.login_form>.login_con>form>div>button[type=submit]:hover{
+.container>.login_body>.login_form>.login_con>form>div>button[type=button]:hover{
     background-color: #5E2FE7;
 }
 

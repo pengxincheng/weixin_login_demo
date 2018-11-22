@@ -6,7 +6,7 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Document</title>
         <link rel="stylesheet" href="../css/style.css">
-        <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     </head>
     <body>
         <header>
@@ -30,46 +30,38 @@
                     <div class="login_top">
                         <img src="../imgs/logo_z.svg" alt="" class="">
                         
-                        <div class="login_tags b_clear">
+                       <#-- <div class="login_tags b_clear">
                             <span class="top_tag l_float active">密码登录</span>
                             <span class="top_tag r_float">扫码登录</span>
-                        </div>
+                        </div>-->
                     </div>
-                    <div class="login_con">
-                        <form action="" method="POST">
+                    <div id="normalLogin" class="login_con">
+                        <form id="loginForm" name="loginForm">
                             <div>
                                 <label for="user_name">用户名</label>
-                                <input type="text" name="" id="user_name" placeholder="账号/手机号/邮箱">
+                                <input type="text" name="userName" id="userName" value="pxc" placeholder="账号/手机号/邮箱">
                                 <img src="../imgs/icons/user.svg">
                                 <p class="tips hidden">请检查您的账号</p>
                             </div>
                             <div>
                                 <label for="user_pwd">密码</label>
-                                <input type="password" name="" id="user_pwd" placeholder="请输入账户密码">
+                                <input type="password" name="password" id="password" value="123456" placeholder="请输入账户密码">
                                 <img src="../imgs/icons/lock.svg">
                                 <p class="tips hidden">请检查您的密码</p>
                             </div>
-                            <div class="b_clear">
-                                <label for="auth_code" class="b_clear">验证码</label>
-                                <input type="text" name="" id="auth_code" placeholder="" class="l_float" maxlength="6">
-                                
-                                <button class="auth_code l_float">获取验证码</button>
-                                <img src="../imgs/icons/auth_code.svg">
-                                <p class="tips hidden">验证码错误</p>
-                                
-                            </div>
+
                             <div class="b_clear submit">
-                                
-                                <button type="submit">登&nbsp;&nbsp;录</button>
+                                <button id="login-button" type="button">登&nbsp;&nbsp;录</button>
                                 <a href="#" class="r_float">忘记密码？</a>
                                 <p class="tips hidden">登录失败，请检查您的账户与密码</p>
                             </div>
                         </form>   
                     </div>
-                    <div class="login_con hidden">
+                    <div id="qrCodeLogin" class="login_con hidden">
                         <div class="qr_code">
                                 <img src="../imgs/qr.png" alt="">
-                                <p>请使用微信扫码登录<br>仅支持已绑定微信的账户进行快速登录</p>
+                                <p>请使用微信扫码登录</p><br>
+                            <button id="test">模拟扫码</button>
                         </div>
                         
                     </div>
