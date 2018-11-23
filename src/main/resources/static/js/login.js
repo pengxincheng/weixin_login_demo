@@ -12,7 +12,7 @@ function showQrcode(qrCodeUrl){
 
 
 $("#login-button").click(function () {
-    $.post("/user/login",$("#loginForm").serialize(),function (data) {
+    $.post("/user/doLogin",$("#loginForm").serialize(),function (data) {
         console.log(data);
         if("SUCCESS" === data.code){
             console.log(data.data.qrCodeUrl)

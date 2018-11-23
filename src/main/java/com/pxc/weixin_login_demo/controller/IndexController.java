@@ -15,7 +15,7 @@ public class IndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-    @RequestMapping("/")
+    @RequestMapping("/login")
     public String index(){
         logger.info("进入登录页。。。。");
         return "login";

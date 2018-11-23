@@ -33,7 +33,7 @@ public class UserController {
     @Resource
     private WxService wxService;
 
-    @RequestMapping("/login")
+    @RequestMapping("/doLogin")
     public WeCashierResp login(LoginReq loginReq, HttpServletRequest request) {
         User user = userMapper.selectByPrimaryKey(loginReq.getUserName());
         if (null != user) {
