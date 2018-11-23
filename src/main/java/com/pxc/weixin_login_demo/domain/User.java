@@ -7,6 +7,8 @@ public class User {
 
     private String openId;
 
+    private Integer sceneId;
+
     public String getUserName() {
         return userName;
     }
@@ -29,5 +31,13 @@ public class User {
 
     public void setOpenId(String openId) {
         this.openId = openId == null ? null : openId.trim();
+    }
+
+    public Integer getSceneId() {
+        return sceneId;
+    }
+
+    public void setSceneId(Integer sceneId) {
+        this.sceneId = sceneId;
     }
 }

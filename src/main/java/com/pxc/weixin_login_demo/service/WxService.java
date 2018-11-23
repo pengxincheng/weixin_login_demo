@@ -27,5 +27,5 @@ public interface WxService {
      * @param accessToken
      * @return
      */
-    JSONObject getQrCode(String accessToken);
+    JSONObject getQrCode(String accessToken,int sceneId);
 }

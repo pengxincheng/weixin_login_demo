@@ -18,7 +18,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * @author pengxincheng@ipaynow.cn
@@ -35,29 +34,27 @@ public class UserController {
     private WxService wxService;
 
     @RequestMapping("/login")
-    public WeCashierResp login(LoginReq loginReq, HttpServletRequest request){
+    public WeCashierResp login(LoginReq loginReq, HttpServletRequest request) {
         User user = userMapper.selectByPrimaryKey(loginReq.getUserName());
-        if(null != user){
+        if (null != user) {
 
-              String accessToken = wxService.getWxAccessToken(WxConfig.APP_ID,WxConfig.APP_SECRET);
-            if(null == accessToken){
+            request.getSession().setAttribute("user", user);
+            int sceneId = user.getSceneId();
+
+            String accessToken = wxService.getWxAccessToken(WxConfig.APP_ID, WxConfig.APP_SECRET);
+            if (null == accessToken) {
                 return WeCashierRespFactory.builderFail("获取token失败");
             }
-            JSONObject result = wxService.getQrCode(accessToken);
-            if( null == result) {
+            JSONObject qrTicketResult = wxService.getQrCode(accessToken, sceneId);
+            if (null == qrTicketResult) {
                 return WeCashierRespFactory.builderFail("获取二维码失败");
             }
 
-            Random random = new Random();
-            int sceneId = random.nextInt(10000);
-            request.getSession().setAttribute("user",user);
-            request.getSession().setAttribute("sceneId",sceneId);
-
-            Map<String,Object> resultData = new HashMap<>();
-            resultData.put("sceneId",sceneId);
-            resultData.put("qrcode",result);
+            Map<String, Object> resultData = new HashMap<>();
+            resultData.put("sceneId", sceneId);
+            resultData.put("qrCodeUrl", WxConfig.QR_CODE_URL + qrTicketResult.getString("ticket"));
             return WeCashierRespFactory.builderSuccess(resultData);
-        }else{
+        } else {
             return WeCashierRespFactory.builderFail("用户名或密码错误！");
         }
     }

@@ -15,9 +15,9 @@ public class IndexController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-    @RequestMapping("/index")
+    @RequestMapping("/")
     public String index(){
         logger.info("进入登录页。。。。");
-        return "index.ftl";
+        return "login";
     }
 }

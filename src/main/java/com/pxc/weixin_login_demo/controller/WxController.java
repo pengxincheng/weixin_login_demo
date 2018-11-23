@@ -3,12 +3,21 @@ package com.pxc.weixin_login_demo.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.pxc.weixin_login_demo.config.WxConfig;
+import com.pxc.weixin_login_demo.dao.UserMapper;
+import com.pxc.weixin_login_demo.domain.User;
+import com.pxc.weixin_login_demo.domain.UserExample;
 import com.pxc.weixin_login_demo.dto.req.WxReq;
 import com.pxc.weixin_login_demo.dto.resp.WeCashierResp;
+import com.pxc.weixin_login_demo.dto.wx.MsgType;
+import com.pxc.weixin_login_demo.dto.wx.ScanMessage;
+import com.pxc.weixin_login_demo.dto.wx.WxBaseMessage;
 import com.pxc.weixin_login_demo.service.WxService;
 import com.pxc.weixin_login_demo.utils.WeCashierRespFactory;
+import com.pxc.weixin_login_demo.utils.XmlUtil;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.simp.user.UserRegistryMessageHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.Charset;
 
 /**
  * @author pengxincheng@ipaynow.cn
@@ -31,6 +41,8 @@ public class WxController {
 
     @Resource
     private WxService wxService;
+    @Resource
+    private UserMapper userMapper;
 
     /**
      * 微信回调 get请求 判断是否是来自微信的请求
@@ -38,7 +50,7 @@ public class WxController {
      * @return
      */
     @GetMapping("/base")
-    public String wxAuth(ModelMap modelMap, WxReq wxReq) {
+    public String wxAuth(WxReq wxReq) {
         logger.info("微信请求参数为：{}", JSON.toJSONString(wxReq));
         try {
             if (wxService.validate(wxReq)) {
@@ -50,6 +62,58 @@ public class WxController {
         }
         return null;
     }
+
+    @PostMapping("/base")
+    public String message(HttpServletRequest request,WxReq wxReq) {
+        logger.info("微信请求参数为：{}", JSON.toJSONString(wxReq));
+        try {
+            if (wxService.validate(wxReq)) {
+                String wxMessage = IOUtils.toString(request.getInputStream(),Charset.defaultCharset());
+
+                MsgType msgType = XmlUtil.xmlToBean(wxMessage,MsgType.class);
+                if("subscribe".equals(msgType.getMsgType())){
+                    ScanMessage scanMessage = XmlUtil.xmlToBean(wxMessage,ScanMessage.class);
+                    logger.info("用户openId={}关注公众号",scanMessage.getFromUserName());
+
+                    int sceneId = Integer.parseInt(scanMessage.getEventKey().substring("qrscene_".length()));
+                    logger.info("sceneId = {}",sceneId);
+
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andSceneIdEqualTo(sceneId);
+                    User user = new User();
+                    user.setOpenId(scanMessage.getFromUserName());
+
+                    userMapper.updateByExampleSelective(user,userExample);
+
+                    WebSocket.sendMessage(String.valueOf(sceneId),true);
+                }else if("unsubscribe".equals(msgType.getMsgType())){
+                    WxBaseMessage wxBaseMessage = XmlUtil.xmlToBean(wxMessage,WxBaseMessage.class);
+                    logger.info("用户openId={}关注公众号",wxBaseMessage.getFromUserName());
+                }else if("SCAN".equals(msgType.getMsgType())){
+                    ScanMessage scanMessage = XmlUtil.xmlToBean(wxMessage,ScanMessage.class);
+                    logger.info("用户openId={}扫码登录",scanMessage.getFromUserName());
+
+                    int sceneId = Integer.parseInt(scanMessage.getEventKey());
+
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andSceneIdEqualTo(sceneId);
+
+                    User user = userMapper.selectByExample(userExample).get(0);
+                    boolean re = user.getOpenId().equals(scanMessage.getFromUserName());
+
+                    WebSocket.sendMessage(String.valueOf(re),re);
+                }
+
+            }
+            return null;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+
+
 
     @PostMapping("/getQrCode")
     public WeCashierResp getQrCode(HttpServletRequest request){

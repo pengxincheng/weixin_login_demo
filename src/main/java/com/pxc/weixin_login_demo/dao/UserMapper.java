@@ -3,6 +3,8 @@ package com.pxc.weixin_login_demo.dao;
 import com.pxc.weixin_login_demo.domain.User;
 import com.pxc.weixin_login_demo.domain.UserExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {

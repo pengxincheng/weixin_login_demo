@@ -313,6 +313,66 @@ public class UserExample {
             addCriterion("open_id not between", value1, value2, "openId");
             return (Criteria) this;
         }
+
+        public Criteria andSceneIdIsNull() {
+            addCriterion("scene_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdIsNotNull() {
+            addCriterion("scene_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdEqualTo(Integer value) {
+            addCriterion("scene_id =", value, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdNotEqualTo(Integer value) {
+            addCriterion("scene_id <>", value, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdGreaterThan(Integer value) {
+            addCriterion("scene_id >", value, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("scene_id >=", value, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdLessThan(Integer value) {
+            addCriterion("scene_id <", value, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdLessThanOrEqualTo(Integer value) {
+            addCriterion("scene_id <=", value, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdIn(List<Integer> values) {
+            addCriterion("scene_id in", values, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdNotIn(List<Integer> values) {
+            addCriterion("scene_id not in", values, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdBetween(Integer value1, Integer value2) {
+            addCriterion("scene_id between", value1, value2, "sceneId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSceneIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("scene_id not between", value1, value2, "sceneId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

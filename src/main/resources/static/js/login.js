@@ -1,8 +1,12 @@
 
-function QrcodeLogin() {
+function qrCodeLogin() {
 
    $("#normalLogin").hide();
    $("#qrCodeLogin").show();
+}
+
+function showQrcode(qrCodeUrl){
+    $("#qr-code-img").attr("src",qrCodeUrl)
 }
 
 
@@ -11,8 +15,10 @@ $("#login-button").click(function () {
     $.post("/user/login",$("#loginForm").serialize(),function (data) {
         console.log(data);
         if("SUCCESS" === data.code){
-            QrcodeLogin();
+            console.log(data.data.qrCodeUrl)
+            qrCodeLogin();
             webSocketConnect(data.data.sceneId);
+            showQrcode(data.data.qrCodeUrl)
         }
     })
 })

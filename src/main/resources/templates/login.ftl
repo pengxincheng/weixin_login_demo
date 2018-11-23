@@ -59,9 +59,9 @@
                     </div>
                     <div id="qrCodeLogin" class="login_con hidden">
                         <div class="qr_code">
-                                <img src="../imgs/qr.png" alt="">
+                                <img id="qr-code-img" alt="">
                                 <p>请使用微信扫码登录</p><br>
-                            <button id="test">模拟扫码</button>
+                           <#-- <button id="test">模拟扫码</button>-->
                         </div>
                         
                     </div>

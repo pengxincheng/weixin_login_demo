@@ -1,7 +1,9 @@
 package com.pxc.weixin_login_demo.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.pxc.weixin_login_demo.config.WxConfig;
 import com.pxc.weixin_login_demo.dto.req.WxReq;
 import com.pxc.weixin_login_demo.service.WxService;
@@ -67,18 +69,18 @@ public class WxServiceImpl implements WxService {
     }
 
     @Override
-    public JSONObject getQrCode(String accessToken) {
+    public JSONObject getQrCode(String accessToken,int sceneId) {
         RestTemplate restTemplate = new RestTemplate();
         Map<String,Object> param = new HashMap<>();
         //{"expire_seconds": 604800, "action_name": "QR_SCENE", "action_info": {"scene": {"scene_id": 123}}}
         param.put("expire_seconds",604800);
         param.put("action_name","QR_SCENE");
-        param.put("action_info","");
-
         Map<String,Object> scene = new HashMap<>();
-        scene.put("scene_id","");
+        scene.put("scene_id",sceneId);
+        param.put("action_info",scene);
 
-        String resp = restTemplate.postForObject(WxConfig.QR_CODE_URL,null,String.class,param);
+        logger.info("获取二维码参数：{}",JSON.toJSONString(param));
+        String resp = restTemplate.postForObject(WxConfig.QR_CODE_TICKET_URL,JSON.toJSONString(param),String.class,accessToken); //请求需要严格要就传jsonString
         logger.info("调用获取二维码接口返回：{}",resp);
         JSONObject result = JSONObject.parseObject(resp);
         if(result.containsKey("ticket")){
