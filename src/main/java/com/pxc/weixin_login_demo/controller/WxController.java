@@ -69,39 +69,46 @@ public class WxController {
         try {
             if (wxService.validate(wxReq)) {
                 String wxMessage = IOUtils.toString(request.getInputStream(),Charset.defaultCharset());
-
+                logger.info("微信消息："+wxMessage);
                 MsgType msgType = XmlUtil.xmlToBean(wxMessage,MsgType.class);
-                if("subscribe".equals(msgType.getMsgType())){
-                    ScanMessage scanMessage = XmlUtil.xmlToBean(wxMessage,ScanMessage.class);
-                    logger.info("用户openId={}关注公众号",scanMessage.getFromUserName());
+                logger.info("msgType={}",JSON.toJSONString(msgType));
+                if("event".equals(msgType.getMsgType())) {
+                    if ("subscribe".equals(msgType.getEvent())) {
+                        ScanMessage scanMessage = XmlUtil.xmlToBean(wxMessage, ScanMessage.class);
+                        logger.info("scanMessage={}", JSON.toJSONString(scanMessage));
+                        logger.info("用户openId={}关注公众号", scanMessage.getFromUserName());
 
-                    int sceneId = Integer.parseInt(scanMessage.getEventKey().substring("qrscene_".length()));
-                    logger.info("sceneId = {}",sceneId);
+                        int sceneId = Integer.parseInt(scanMessage.getEventKey().substring("qrscene_".length()));
+                        logger.info("sceneId = {}", sceneId);
 
-                    UserExample userExample = new UserExample();
-                    userExample.createCriteria().andSceneIdEqualTo(sceneId);
-                    User user = new User();
-                    user.setOpenId(scanMessage.getFromUserName());
+                        UserExample userExample = new UserExample();
+                        userExample.createCriteria().andSceneIdEqualTo(sceneId);
+                        User user = new User();
+                        user.setOpenId(scanMessage.getFromUserName());
 
-                    userMapper.updateByExampleSelective(user,userExample);
+                        userMapper.updateByExampleSelective(user, userExample);
 
-                    WebSocket.sendMessage(String.valueOf(sceneId),true);
-                }else if("unsubscribe".equals(msgType.getMsgType())){
-                    WxBaseMessage wxBaseMessage = XmlUtil.xmlToBean(wxMessage,WxBaseMessage.class);
-                    logger.info("用户openId={}关注公众号",wxBaseMessage.getFromUserName());
-                }else if("SCAN".equals(msgType.getMsgType())){
-                    ScanMessage scanMessage = XmlUtil.xmlToBean(wxMessage,ScanMessage.class);
-                    logger.info("用户openId={}扫码登录",scanMessage.getFromUserName());
+                        WebSocket.sendMessage(String.valueOf(sceneId), true);
+                        logger.info("已向webSocket发送通知");
+                    } else if ("unsubscribe".equals(msgType.getEvent())) {
+                        WxBaseMessage wxBaseMessage = XmlUtil.xmlToBean(wxMessage, WxBaseMessage.class);
+                        logger.info("用户openId={}关注公众号", wxBaseMessage.getFromUserName());
+                    } else if ("SCAN".equals(msgType.getEvent())) {
+                        ScanMessage scanMessage = XmlUtil.xmlToBean(wxMessage, ScanMessage.class);
+                        logger.info("scanMessage={}", JSON.toJSONString(scanMessage));
+                        logger.info("用户openId={}扫码登录", scanMessage.getFromUserName());
 
-                    int sceneId = Integer.parseInt(scanMessage.getEventKey());
+                        int sceneId = Integer.parseInt(scanMessage.getEventKey());
 
-                    UserExample userExample = new UserExample();
-                    userExample.createCriteria().andSceneIdEqualTo(sceneId);
+                        UserExample userExample = new UserExample();
+                        userExample.createCriteria().andSceneIdEqualTo(sceneId);
 
-                    User user = userMapper.selectByExample(userExample).get(0);
-                    boolean re = user.getOpenId().equals(scanMessage.getFromUserName());
+                        User user = userMapper.selectByExample(userExample).get(0);
+                        boolean re = user.getOpenId().equals(scanMessage.getFromUserName());
 
-                    WebSocket.sendMessage(String.valueOf(re),re);
+                        WebSocket.sendMessage(String.valueOf(user.getSceneId()), re);
+                        logger.info("已向webSocket发送通知");
+                    }
                 }
 
             }
