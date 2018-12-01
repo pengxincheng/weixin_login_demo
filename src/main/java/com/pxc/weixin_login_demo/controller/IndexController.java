@@ -20,4 +20,10 @@ public class IndexController {
         logger.info("进入登录页。。。。");
         return "login";
     }
+
+    @RequestMapping("/success")
+    public String success(){
+        logger.info("进入主页。。。。");
+        return "success";
+    }
 }

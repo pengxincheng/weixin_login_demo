@@ -1,6 +1,7 @@
 package com.pxc.weixin_login_demo;
 
 
+import com.alibaba.fastjson.JSON;
 import com.pxc.weixin_login_demo.dto.wx.MsgType;
 import com.pxc.weixin_login_demo.dto.wx.ScanMessage;
 import com.pxc.weixin_login_demo.dto.wx.WxBaseMessage;
@@ -10,6 +11,8 @@ import com.pxc.weixin_login_demo.utils.XmlUtil;
 import org.junit.Test;
 
 import javax.xml.bind.JAXBException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author pengxincheng@ipaynow.cn
@@ -53,5 +56,26 @@ public class XmlTest {
             e.printStackTrace();
         }
         System.out.println(msgType.getMsgType());
+    }
+
+    @Test
+    public void testParam(){
+
+        int sceneId = 1234;
+
+        Map<String,Object> param = new HashMap<>();
+        //{"expire_seconds": 604800, "action_name": "QR_SCENE", "action_info": {"scene": {"scene_id": 123}}}
+        param.put("expire_seconds",604800);
+        param.put("action_name","QR_SCENE");
+
+        Map<String,Object> scene = new HashMap<>();
+        scene.put("scene_id",sceneId);
+
+        Map<String,Object> sceneMap = new HashMap<>();
+        sceneMap.put("scene",scene);
+
+        param.put("action_info",sceneMap);
+
+        System.out.println(JSON.toJSONString(param));
     }
 }

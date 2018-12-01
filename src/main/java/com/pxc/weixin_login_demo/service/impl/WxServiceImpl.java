@@ -75,9 +75,14 @@ public class WxServiceImpl implements WxService {
         //{"expire_seconds": 604800, "action_name": "QR_SCENE", "action_info": {"scene": {"scene_id": 123}}}
         param.put("expire_seconds",604800);
         param.put("action_name","QR_SCENE");
+
         Map<String,Object> scene = new HashMap<>();
         scene.put("scene_id",sceneId);
-        param.put("action_info",scene);
+
+        Map<String,Object> sceneMap = new HashMap<>();
+        sceneMap.put("scene",scene);
+
+        param.put("action_info",sceneMap);
 
         logger.info("获取二维码参数：{}",JSON.toJSONString(param));
         String resp = restTemplate.postForObject(WxConfig.QR_CODE_TICKET_URL,JSON.toJSONString(param),String.class,accessToken); //请求需要严格要就传jsonString
