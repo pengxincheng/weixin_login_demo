@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "xml")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class ScanMessage extends WxBaseMessage {
+public class ScanMessage {
 
     @XmlElement(name = "ToUserName")
     private String toUserName;
@@ -36,52 +36,42 @@ public class ScanMessage extends WxBaseMessage {
     @XmlElement(name = "Ticket")
     private String ticket;
 
-    @Override
     public String getToUserName() {
         return toUserName;
     }
 
-    @Override
     public void setToUserName(String toUserName) {
         this.toUserName = toUserName;
     }
 
-    @Override
     public String getFromUserName() {
         return fromUserName;
     }
 
-    @Override
     public void setFromUserName(String fromUserName) {
         this.fromUserName = fromUserName;
     }
 
-    @Override
     public String getCreateTime() {
         return createTime;
     }
 
-    @Override
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    @Override
     public String getMsgType() {
         return msgType;
     }
 
-    @Override
     public void setMsgType(String msgType) {
         this.msgType = msgType;
     }
 
-    @Override
     public String getEvent() {
         return event;
     }
 
-    @Override
     public void setEvent(String event) {
         this.event = event;
     }
