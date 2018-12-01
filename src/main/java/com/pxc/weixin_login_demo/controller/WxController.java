@@ -134,7 +134,7 @@ public class WxController {
                 return WeCashierRespFactory.builderFail("获取二维码失败");
             }*/
 
-            WebSocket.sendMessage(String.valueOf(request.getSession().getAttribute("sceneId")),true);
+            WebSocket.sendMessage(String.valueOf(1234),true);
             return WeCashierRespFactory.builderSuccess();
         }catch (Exception e){
             logger.error(e.getMessage(),e);

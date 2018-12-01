@@ -40,7 +40,7 @@ function webSocketConnect (sceneId) {
         //成功
         if (data.data == "true") {
             this.close();//关闭连接
-            alert("验证通过")
+            window.location.href="/success"
         } else {
             this.close();
             webSocketConnect();
